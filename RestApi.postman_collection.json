@@ -9,16 +9,28 @@
     {
       "name": "products",
       "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJwcm9kdWN0LWFwaSIsInN1YiI6ImFkbWluIiwiZXhwIjoxNzg3MTQ1NTkxLCJpYXQiOjE3ODcxNDQ2OTEsInJvbGVzIjpbIlJPTEVfQURNSU4iXX0.cbdpYUidggtAfMOXlnYKNO63mdj0nqww6hrWl9FrEFeYSOfcqRee77Oz78uB9frlK_hkUozHTbLJno7371GrM0Y-LjoH_Opdtu_1Xn9O5OGLdgeAA3FeIFmc8DRn9LXw0IG3uydyFvaWSMdgUGn6NJWJhT1I8dgAJska2koGr2g0LEO5AWP6Lu7I5jdXwvOHjH4uExF7Ct-8tertKcbqAeY-TN9gMgQTzdYBHuvR_I5wngClezpDAKFqiXYUw1BEpGaUcrjXd2rPaUpINS1nGqUYU39Mb5CviyT2iChZR3Rjz0Knzaoj6PyfYgT0ewe4ZudpokpSU8BDsncVIi_ZAw",
+              "type": "string"
+            }
+          ]
+        },
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://localhost:8080/products",
+          "raw": "http://localhost:8080/api/v1/products",
           "protocol": "http",
           "host": [
             "localhost"
           ],
           "port": "8080",
           "path": [
+            "api",
+            "v1",
             "products"
           ]
         }
@@ -31,15 +43,17 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://localhost:8080/products/1",
+          "raw": "http://localhost:8080/api/v1/products/15",
           "protocol": "http",
           "host": [
             "localhost"
           ],
           "port": "8080",
           "path": [
+            "api",
+            "v1",
             "products",
-            "1"
+            "15"
           ]
         }
       },
@@ -118,15 +132,32 @@
       "name": "partialUpdate",
       "request": {
         "method": "PATCH",
-        "header": [],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"price\": 6499\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
         "url": {
-          "raw": "http://localhost:8080/products/1",
+          "raw": "http://localhost:8080/api/v1/products/1",
           "protocol": "http",
           "host": [
             "localhost"
           ],
           "port": "8080",
           "path": [
+            "api",
+            "v1",
             "products",
             "1"
           ]
@@ -160,15 +191,17 @@
         "method": "HEAD",
         "header": [],
         "url": {
-          "raw": "http://localhost:8080/products/1",
+          "raw": "http://localhost:8080/api/v1/products/2",
           "protocol": "http",
           "host": [
             "localhost"
           ],
           "port": "8080",
           "path": [
+            "api",
+            "v1",
             "products",
-            "1"
+            "2"
           ]
         }
       },
@@ -180,13 +213,15 @@
         "method": "OPTIONS",
         "header": [],
         "url": {
-          "raw": "http://localhost:8080/products",
+          "raw": "http://localhost:8080/api/v1/products",
           "protocol": "http",
           "host": [
             "localhost"
           ],
           "port": "8080",
           "path": [
+            "api",
+            "v1",
             "products"
           ]
         }
@@ -197,7 +232,30 @@
       "name": "pagination",
       "request": {
         "method": "GET",
-        "header": []
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/products?page=1&size=10",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "products"
+          ],
+          "query": [
+            {
+              "key": "page",
+              "value": "1"
+            },
+            {
+              "key": "size",
+              "value": "10"
+            }
+          ]
+        }
       },
       "response": []
     },
@@ -205,7 +263,34 @@
       "name": "sorting",
       "request": {
         "method": "GET",
-        "header": []
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/products?page=0&size=10&sort=id,asc",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "products"
+          ],
+          "query": [
+            {
+              "key": "page",
+              "value": "0"
+            },
+            {
+              "key": "size",
+              "value": "10"
+            },
+            {
+              "key": "sort",
+              "value": "id,asc"
+            }
+          ]
+        }
       },
       "response": []
     },
@@ -213,7 +298,30 @@
       "name": "Multiple sorting",
       "request": {
         "method": "GET",
-        "header": []
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/products?sort=category,asc&sort=price,desc",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "products"
+          ],
+          "query": [
+            {
+              "key": "sort",
+              "value": "category,asc"
+            },
+            {
+              "key": "sort",
+              "value": "price,desc"
+            }
+          ]
+        }
       },
       "response": []
     },
@@ -221,7 +329,26 @@
       "name": "Filtering",
       "request": {
         "method": "GET",
-        "header": []
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/products?category=Electronics",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "products"
+          ],
+          "query": [
+            {
+              "key": "category",
+              "value": "Electronics"
+            }
+          ]
+        }
       },
       "response": []
     },
@@ -229,7 +356,69 @@
       "name": "Pagination+sorting+filter",
       "request": {
         "method": "GET",
-        "header": []
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/products?category=Electronics&page=0&size=5&sort=price,desc",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "products"
+          ],
+          "query": [
+            {
+              "key": "category",
+              "value": "Electronics"
+            },
+            {
+              "key": "page",
+              "value": "0"
+            },
+            {
+              "key": "size",
+              "value": "5"
+            },
+            {
+              "key": "sort",
+              "value": "price,desc"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "login",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"username\": \"admin\",\r\n  \"password\": \"admin123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/auth/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "auth",
+            "login"
+          ]
+        }
       },
       "response": []
     }

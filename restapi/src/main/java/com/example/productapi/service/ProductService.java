@@ -7,6 +7,7 @@ import com.example.productapi.model.Product;
 import com.example.productapi.repository.ProductRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 
@@ -25,6 +26,7 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public Page<ProductResponse> getAllProducts(
             String category,
             Pageable pageable) {
@@ -43,12 +45,14 @@ public class ProductService {
         return products.map(this::toResponse);
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ProductResponse getProductById(Long id) {
 
         return productRepository.findById(id).map(this::toResponse)
                 .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public ProductResponse createProduct(ProductRequest request) {
 
         Product product = toEntity(request);
@@ -58,6 +62,7 @@ public class ProductService {
         return toResponse(savedProduct);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public ProductResponse updateProduct(
             Long id,
             ProductRequest request) {
@@ -107,6 +112,7 @@ public class ProductService {
         return toResponse(savedProduct);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public boolean deleteProduct(Long id) {
 
         if (!productRepository.existsById(id)) {

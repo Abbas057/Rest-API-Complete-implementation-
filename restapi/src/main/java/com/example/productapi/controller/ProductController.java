@@ -2,7 +2,7 @@ package com.example.productapi.controller;
 
 import com.example.productapi.dto.ProductRequest;
 import com.example.productapi.dto.ProductResponse;
-import com.example.productapi.model.Product;
+import com.example.productapi.service.IdempotencyService;
 import com.example.productapi.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -18,13 +18,17 @@ import org.springframework.web.server.ResponseStatusException;
  * REST controller responsible for handling product-related HTTP requests.
  */
 @RestController
+@RequestMapping("/api/v1/products")
 public class ProductController {
 
 
     private final ProductService productService;
 
-    public ProductController(ProductService productService) {
+    private final IdempotencyService idempotencyService;
+
+    public ProductController(ProductService productService, IdempotencyService idempotencyService) {
         this.productService = productService;
+        this.idempotencyService = idempotencyService;
     }
 
     /**
@@ -32,7 +36,7 @@ public class ProductController {
      *
      * @return a welcome message
      */
-    @GetMapping("/products")
+    @GetMapping()
     public Page<ProductResponse> getProducts(
             @RequestParam(required = false) String category,
             Pageable pageable) {
@@ -40,25 +44,42 @@ public class ProductController {
         return productService.getAllProducts(category, pageable);
     }
 
-    @GetMapping("/products/{id}")
+    @GetMapping("/{id}")
     public ProductResponse getProductById(@PathVariable Long id) {
         return productService.getProductById(id);
     }
 
 
-    @PostMapping("/products")
+    @PostMapping
     public ResponseEntity<ProductResponse> createProduct(
+            @RequestHeader("Idempotency-Key") String idempotencyKey,
             @Valid @RequestBody ProductRequest request) {
+
+        if (idempotencyService.contains(idempotencyKey)) {
+
+            ProductResponse existingResponse =
+                    (ProductResponse)
+                            idempotencyService.getResponse(idempotencyKey);
+
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(existingResponse);
+        }
 
         ProductResponse response =
                 productService.createProduct(request);
+
+        idempotencyService.saveResponse(
+                idempotencyKey,
+                response
+        );
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(response);
     }
 
-    @PutMapping("/products/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<ProductResponse> updateProduct(
             @PathVariable Long id,
             @Valid @RequestBody ProductRequest request) {
@@ -76,7 +97,7 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("/products/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<ProductResponse> patchProduct(
             @PathVariable Long id,
             @Valid @RequestBody ProductRequest request) {
@@ -101,7 +122,7 @@ public class ProductController {
      * @return HTTP 204 when the product is successfully deleted
      * @throws ResponseStatusException with HTTP 404 when the product does not exist
      */
-    @DeleteMapping("/products/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
 
         boolean deleted = productService.deleteProduct(id);
@@ -124,7 +145,7 @@ public class ProductController {
      * @throws ResponseStatusException with HTTP 404 if the product does not exist
      */
     @RequestMapping(
-            value = "/products/{id}",
+            value = "/{id}",
             method = RequestMethod.HEAD
     )
     public ResponseEntity<Void> headProduct(@PathVariable Long id) {
@@ -147,7 +168,7 @@ public class ProductController {
      * @return HTTP 200 with an Allow header describing supported methods
      */
     @RequestMapping(
-            value = "/products",
+            value = "",
             method = RequestMethod.OPTIONS
     )
     public ResponseEntity<Void> optionsProducts() {

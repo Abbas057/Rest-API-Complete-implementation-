@@ -1,5 +1,6 @@
 package com.example.productapi.service;
 
+import com.example.productapi.client.InventoryClient;
 import com.example.productapi.dto.ProductRequest;
 import com.example.productapi.dto.ProductResponse;
 import com.example.productapi.exception.ProductNotFoundException;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Handles product-related business operations.
@@ -22,8 +24,11 @@ public class ProductService {
 
     private final ProductRepository productRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    private final InventoryClient inventoryClient;
+
+    public ProductService(ProductRepository productRepository, InventoryClient inventoryClient) {
         this.productRepository = productRepository;
+        this.inventoryClient = inventoryClient;
     }
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
@@ -142,5 +147,10 @@ public class ProductService {
                 product.getPrice(),
                 product.getCategory()
         );
+    }
+
+    public CompletableFuture<String> getInventory(Long productId) {
+
+        return inventoryClient.getInventory(productId);
     }
 }

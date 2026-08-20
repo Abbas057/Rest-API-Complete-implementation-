@@ -421,6 +421,47 @@
         }
       },
       "response": []
+    },
+    {
+      "name": "inventory",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "call from p to I",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJwcm9kdWN0LWFwaSIsInN1YiI6ImFkbWluIiwiZXhwIjoxNzg3MjI2MTk2LCJpYXQiOjE3ODcyMjUyOTYsInJvbGVzIjpbIlJPTEVfQURNSU4iXX0.WfXd5c3cl0xYDDObGSjxtZXqQvScPiWiKj3p7QmgdVOAIKcpg7kB9yqnd1tHxo1COeAiUEc_x2IE6AQXsIVo2fc4GfLq6y0jNIDTdcuQUtPExeHSk_duWrezMgCMOXpJi-wSxIJzeLBP3dw2EwXaH7AOFLdoGybCCjW5StYL2RLmPVnmPVaN1GGsbn9U_MaMeFBKEZX0jYb-4P6eLoaRASzmw1Nm9McoqMYqNRf_w3A_Z1u32tKUlcWeSD3E77VZJ_3jkxYMVVMvRdMNP5369n0Q6yuetlAGVbKohWSsGqe7uyPcnVRDeQqt1CXEtz9jOU2kLFsspZsVIG0yozD1xw",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/products/1/inventory",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "products",
+            "1",
+            "inventory"
+          ]
+        }
+      },
+      "response": []
     }
   ]
 }

@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.concurrent.CompletableFuture;
+
 
 /**
  * REST controller responsible for handling product-related HTTP requests.
@@ -181,5 +183,15 @@ public class ProductController {
                         HttpMethod.OPTIONS
                 )
                 .build();
+    }
+
+    /*
+    Calls Inventory service through REST
+     */
+
+    @GetMapping("/{id}/inventory")
+    public CompletableFuture<String> getInventory(@PathVariable Long id) {
+
+        return productService.getInventory(id);
     }
 }
